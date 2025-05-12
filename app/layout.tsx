@@ -5,6 +5,7 @@ import "./globals.css"
 import { SolanaWalletProvider } from "@/components/wallet-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { NetworkProvider } from "@/contexts/network-context"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
           <NetworkProvider>
             <SolanaWalletProvider>{children}</SolanaWalletProvider>
           </NetworkProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
