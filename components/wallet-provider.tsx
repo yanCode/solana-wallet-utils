@@ -10,18 +10,21 @@ import {
 
   // BraveWalletAdapter,
 } from "@solana/wallet-adapter-wallets"
-import { clusterApiUrl } from "@solana/web3.js"
+// import { clusterApiUrl } from "@solana/web3.js"; // No longer needed directly here
 import { type ReactNode, useMemo } from "react"
+import { useNetworkConfiguration } from "@/contexts/network-context"; // Import the hook
 
 // Import wallet adapter CSS
 import "@solana/wallet-adapter-react-ui/styles.css"
 
 export function SolanaWalletProvider({ children }: { children: ReactNode }) {
-  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'
-  const network = WalletAdapterNetwork.Devnet
+  const { getRpcEndpoint } = useNetworkConfiguration(); // Use the hook
+
+  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta' or custom RPC
+  // const network = WalletAdapterNetwork.Devnet; // Removed
 
   // You can also provide a custom RPC endpoint
-  const endpoint = useMemo(() => clusterApiUrl(network), [network])
+  const endpoint = useMemo(() => getRpcEndpoint(), [getRpcEndpoint]); // Get endpoint from context
 
   const wallets = useMemo(
     () => [
