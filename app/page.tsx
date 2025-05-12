@@ -18,8 +18,8 @@ export default function Home() {
           Solana Utils
         </h1>
 
-        <div className="w-full max-w-md flex flex-col gap-8">
-          <div className="flex justify-center items-center gap-4">
+        <div className="w-full max-w-md flex flex-col gap-8 justify">
+          <div className="flex justify-end">
             <WalletMultiButton />
           </div>
 

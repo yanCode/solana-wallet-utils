@@ -63,8 +63,8 @@
 }
 
 /* Custom styles for Solana wallet adapter */
-.wallet-adapter-button-custom {
-  @apply bg-primary text-primary-foreground font-medium rounded-md px-6 py-2 transition-colors hover:brightness-90;
+.wallet-adapter-button {
+  @apply  font-medium rounded-md px-4 py-1.5 h-9  transition-colors hover:brightness-90;
 }
 
 .wallet-adapter-dropdown-list {
