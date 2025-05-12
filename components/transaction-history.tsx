@@ -45,7 +45,7 @@ export function TransactionHistory() {
         // Get transaction details
         const transactionDetails = await Promise.all(
           signatures.map(async (sig) => {
-            const tx = await connection.getParsedTransaction(sig.signature, "confirmed")
+            const tx = await connection.getParsedTransaction(sig.signature, { commitment: "confirmed", maxSupportedTransactionVersion: 0 })
             return { signature: sig, tx }
           }),
         )
@@ -138,13 +138,12 @@ export function TransactionHistory() {
             {transactions.map((tx) => (
               <div key={tx.signature} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50">
                 <div
-                  className={`p-2 rounded-full ${
-                    tx.type === "incoming"
-                      ? "bg-green-500/20 text-green-500"
-                      : tx.type === "outgoing"
-                        ? "bg-red-500/20 text-red-500"
-                        : "bg-gray-500/20 text-gray-500"
-                  }`}
+                  className={`p-2 rounded-full ${tx.type === "incoming"
+                    ? "bg-green-500/20 text-green-500"
+                    : tx.type === "outgoing"
+                      ? "bg-red-500/20 text-red-500"
+                      : "bg-gray-500/20 text-gray-500"
+                    }`}
                 >
                   <ArrowDownUp className="h-4 w-4" />
                 </div>
@@ -165,9 +164,8 @@ export function TransactionHistory() {
 
                     {tx.amount !== null && (
                       <div
-                        className={`font-medium ${
-                          tx.type === "incoming" ? "text-green-500" : tx.type === "outgoing" ? "text-red-500" : ""
-                        }`}
+                        className={`font-medium ${tx.type === "incoming" ? "text-green-500" : tx.type === "outgoing" ? "text-red-500" : ""
+                          }`}
                       >
                         {tx.type === "incoming" ? "+" : "-"}
                         {tx.amount.toFixed(4)} SOL

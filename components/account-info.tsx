@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Copy } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
+import EmptyAccountInfo from "@/app/ui/empty.account.info"
 
 export function AccountInfo() {
   const { connection } = useConnection()
@@ -65,17 +66,7 @@ export function AccountInfo() {
   }
 
   if (!publicKey) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Account Information</CardTitle>
-          <CardDescription>Connect your wallet to view account details</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col items-center justify-center py-8">
-          <p className="text-muted-foreground">No wallet connected</p>
-        </CardContent>
-      </Card>
-    )
+    return <EmptyAccountInfo />
   }
 
   return (
