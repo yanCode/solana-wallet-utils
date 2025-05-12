@@ -6,9 +6,9 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
-  // BackpackWalletAdapter,
-  // BraveWalletAdapter,
   CoinbaseWalletAdapter,
+
+  // BraveWalletAdapter,
 } from "@solana/wallet-adapter-wallets"
 import { clusterApiUrl } from "@solana/web3.js"
 import { type ReactNode, useMemo } from "react"
@@ -23,16 +23,15 @@ export function SolanaWalletProvider({ children }: { children: ReactNode }) {
   // You can also provide a custom RPC endpoint
   const endpoint = useMemo(() => clusterApiUrl(network), [network])
 
-  // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
-      // new BackpackWalletAdapter(),
-      // new BraveWalletAdapter(),
       new CoinbaseWalletAdapter(),
+      // If you want Coinbase, uncomment its import and add: new CoinbaseWalletAdapter(),
+      // Only wallets explicitly instantiated and included here will be shown.
     ],
-    [network],
+    []
   )
 
   return (
