@@ -67,9 +67,9 @@ export function SendTransaction() {
 
       // Send transaction
       const signature = await sendTransaction(transaction, connection)
-
-      // Wait for confirmation
-      const confirmation = await connection.confirmTransaction(signature, "confirmed")
+      const latestBlockhash = await connection.getLatestBlockhash();
+      // // Wait for confirmation
+      const confirmation = await connection.confirmTransaction({ signature, ...latestBlockhash }, "confirmed")
 
       if (confirmation.value.err) {
         throw new Error("Transaction failed")

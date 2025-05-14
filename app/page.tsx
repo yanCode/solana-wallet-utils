@@ -14,11 +14,9 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center  bg-gradient-to-b from-purple-900/10 to-teal-900/10">
       <div className="flex justify-between items-center w-full p-4 md:p-15">
         <div className="text-sm text-muted-foreground">
-          {/* <NetworkSwitcherMinimalDisplay /> Could be a component to show current network if dropdown is too much */}
         </div>
         <div className="flex items-center space-x-2">
           <ThemeToggle />
-          {/* <NetworkSwitcher /> Now it will be below the title */}
         </div>
       </div>
       <div className="z-10 max-w-5xl w-full flex flex-col items-center">
