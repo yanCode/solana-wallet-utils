@@ -65,19 +65,22 @@ export function TransactionHistory() {
 
             // Look for SOL transfers
             if (tx.transaction.message.instructions.length > 0) {
-              const instruction = tx.transaction.message.instructions[0]
+              // Iterate through all instructions to find transfer
+              for (const instruction of tx.transaction.message.instructions) {
+                if ("parsed" in instruction && instruction.parsed?.type === "transfer") {
+                  const { info } = instruction.parsed
 
-              if ("parsed" in instruction && instruction.parsed?.type === "transfer") {
-                const { info } = instruction.parsed
-
-                if (info.source === publicKey.toString()) {
-                  type = "outgoing"
-                  amount = info.lamports / LAMPORTS_PER_SOL
-                  counterparty = info.destination
-                } else if (info.destination === publicKey.toString()) {
-                  type = "incoming"
-                  amount = info.lamports / LAMPORTS_PER_SOL
-                  counterparty = info.source
+                  if (info.source === publicKey.toString()) {
+                    type = "outgoing"
+                    amount = info.lamports / LAMPORTS_PER_SOL
+                    counterparty = info.destination
+                    break // Found the transfer instruction, no need to continue
+                  } else if (info.destination === publicKey.toString()) {
+                    type = "incoming"
+                    amount = info.lamports / LAMPORTS_PER_SOL
+                    counterparty = info.source
+                    break // Found the transfer instruction, no need to continue
+                  }
                 }
               }
             }
