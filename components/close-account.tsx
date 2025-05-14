@@ -38,22 +38,6 @@ export function CloseAccount() {
     try {
       // Get all token accounts owned by the wallet
       const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, { programId: TOKEN_PROGRAM_ID })
-
-      // Get all accounts owned by the wallet
-      const allAccounts = await connection.getParsedProgramAccounts(SystemProgram.programId, {
-        filters: [
-          {
-            dataSize: 0, // Filter for accounts with no data
-          },
-          {
-            memcmp: {
-              offset: 32, // Offset of the owner field in account data
-              bytes: publicKey.toBase58(),
-            },
-          },
-        ],
-      })
-
       // Process token accounts
       const tokenAccountsInfo: AccountInfo[] = await Promise.all(
         tokenAccounts.value.map(async (account) => {
@@ -77,25 +61,8 @@ export function CloseAccount() {
         }),
       )
 
-      // Process other accounts
-      const otherAccountsInfo: AccountInfo[] = await Promise.all(
-        allAccounts.map(async (account) => {
-          const balance = await connection.getBalance(account.pubkey)
 
-          // Get rent exempt amount
-          const rentExempt = await connection.getMinimumBalanceForRentExemption(0)
-
-          return {
-            pubkey: account.pubkey,
-            type: "system",
-            balance: balance / LAMPORTS_PER_SOL,
-            rentExempt: rentExempt / LAMPORTS_PER_SOL,
-            selected: false,
-          }
-        }),
-      )
-
-      setAccounts([...tokenAccountsInfo, ...otherAccountsInfo])
+      setAccounts([...tokenAccountsInfo])
     } catch (error) {
       console.error("Error fetching accounts:", error)
       toast({
@@ -171,8 +138,9 @@ export function CloseAccount() {
           // Send transaction
           const signature = await sendTransaction(transaction, connection)
 
+          const latestBlockhash = await connection.getLatestBlockhash()
           // Wait for confirmation
-          const confirmation = await connection.confirmTransaction(signature, "confirmed")
+          const confirmation = await connection.confirmTransaction({ signature, ...latestBlockhash }, "confirmed")
 
           if (confirmation.value.err) {
             throw new Error("Transaction failed")
@@ -183,8 +151,6 @@ export function CloseAccount() {
           console.error(`Error closing account ${account.pubkey.toString()}:`, error)
         }
       }
-
-      // TODO: Handle other account types if needed
 
       toast({
         title: "Accounts closed",
@@ -212,7 +178,7 @@ export function CloseAccount() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Close Accounts</CardTitle>
+        <CardTitle>Close Token Accounts</CardTitle>
         <CardDescription>Reclaim rent from token accounts and wallet-owned accounts</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -256,20 +222,19 @@ export function CloseAccount() {
               </AlertDescription>
             </Alert>
 
-            <div className="border rounded-md">
-              <div className="grid grid-cols-12 gap-2 p-3 border-b font-medium text-sm">
+            <div className="border rounded-md overflow-hidden">
+              <div className="grid grid-cols-12 gap-1 p-3 border-b font-medium text-sm">
                 <div className="col-span-1"></div>
-                <div className="col-span-6">Account</div>
+                <div className="col-span-5">Account</div>
                 <div className="col-span-2">Type</div>
-                <div className="col-span-3">Rent (SOL)</div>
+                <div className="col-span-4">Rent (SOL)</div>
               </div>
-              <div className="max-h-[300px] overflow-y-auto">
+              <div className="max-h-[300px] overflow-y-auto overflow-x-hidden">
                 {accounts.map((account) => (
                   <div
                     key={account.pubkey.toString()}
-                    className={`grid grid-cols-12 gap-2 p-3 text-sm items-center ${
-                      account.type === "token" && account.balance > 0 ? "bg-amber-500/10" : ""
-                    }`}
+                    className={`grid grid-cols-12 gap-2 p-3 text-sm items-center ${account.type === "token" && account.balance > 0 ? "bg-amber-500/10" : ""
+                      }`}
                   >
                     <div className="col-span-1">
                       <Checkbox
@@ -278,7 +243,7 @@ export function CloseAccount() {
                         disabled={account.type === "token" && account.balance > 0}
                       />
                     </div>
-                    <div className="col-span-6 font-mono truncate" title={account.pubkey.toString()}>
+                    <div className="col-span-5 font-mono truncate" title={account.pubkey.toString()}>
                       {account.pubkey.toString().slice(0, 8)}...{account.pubkey.toString().slice(-8)}
                       {account.tokenName && <div className="text-xs text-muted-foreground">{account.tokenName}</div>}
                     </div>
@@ -293,10 +258,10 @@ export function CloseAccount() {
                         </span>
                       )}
                     </div>
-                    <div className="col-span-3 flex items-center justify-between">
+                    <div className="col-span-4 flex items-center justify-between">
                       <span>{account.rentExempt.toFixed(6)}</span>
                       {account.type === "token" && account.balance > 0 && (
-                        <div className="text-xs text-amber-500">Has {account.balance} tokens</div>
+                        <div className="pl-2 text-xs text-amber-500">Has ~{account.balance.toFixed(2)} tokens</div>
                       )}
                     </div>
                   </div>
