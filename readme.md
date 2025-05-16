@@ -9,11 +9,13 @@ Welcome to the Solana Wallet Utils dApp! This application is designed to simplif
 - **Batch Transfer SOL**: Send SOL in batches to multiple addresses, saving you time and effort when managing your transactions.
 
 
-![Close Accounts](./snapshots/close-accounts.jpg)
 
 ## Deployment
 
-This dApp has been deployed and is accessible at [Solana Wallet Utils](https://solana-wallet-utils.vercel.app/). Connect your wallet and start utilizing these features today!
+This dApp has been deployed and is accessible at [https://solana-wallet-utils.vercel.app](https://solana-wallet-utils.vercel.app/). Connect your wallet and start utilizing these features today!
+
+
+![Close Accounts](./snapshots/close-accounts.jpg)
 
 ## Getting Started
 
