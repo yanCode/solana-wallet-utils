@@ -1,6 +1,5 @@
 "use client"
 
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react"
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 import {
@@ -8,9 +7,7 @@ import {
   SolflareWalletAdapter,
   CoinbaseWalletAdapter,
 
-  // BraveWalletAdapter,
 } from "@solana/wallet-adapter-wallets"
-// import { clusterApiUrl } from "@solana/web3.js"; // No longer needed directly here
 import { type ReactNode, useMemo } from "react"
 import { useNetworkConfiguration } from "@/contexts/network-context"; // Import the hook
 
@@ -31,8 +28,6 @@ export function SolanaWalletProvider({ children }: { children: ReactNode }) {
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
       new CoinbaseWalletAdapter(),
-      // If you want Coinbase, uncomment its import and add: new CoinbaseWalletAdapter(),
-      // Only wallets explicitly instantiated and included here will be shown.
     ],
     []
   )

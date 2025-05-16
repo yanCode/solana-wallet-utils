@@ -179,7 +179,7 @@ export function CloseAccount() {
     <Card>
       <CardHeader>
         <CardTitle>Close Token Accounts</CardTitle>
-        <CardDescription>Reclaim rent from token accounts and wallet-owned accounts</CardDescription>
+        <CardDescription>Reclaim rent from token accounts</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between items-center">
